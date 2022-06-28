@@ -10,7 +10,7 @@ import RealityKit
 
 struct ContentView : View {
     var body: some View {
-        return ARTextViewContainer()
+        return ARGestureViewContainer()
             .edgesIgnoringSafeArea(.all)
     }
 }
@@ -91,6 +91,42 @@ struct ARTextViewContainer: UIViewRepresentable {
     
     func updateUIView(_ uiView: ARView, context: Context) {
         
+    }
+}
+
+struct ARGestureViewContainer: UIViewRepresentable {
+    
+    func makeUIView(context: Context) -> ARView {
+        let arView = ARView(frame: .zero)                           //context가 뭘까...실제로 반응해주는 놈은 coordinator다.
+        arView.addGestureRecognizer(UITapGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.handleTap)))
+        //arView가 탭 제스쳐 이벤트를 수신할 책임이 있음을 의미.
+        
+        //모든 다른 제스쳐에 대해 모든 다른 delegate 기능은 coordinator가 처리합니다.
+        //본디 UIKit코드에선 delegate위임을 self로 그 View가 받지만, UIKit in SwiftUI코드에선 실제 SwiftUI에 반영하기위해 coordinator를 필수로 구현해야한다. 그렇기에 delegate도 coordinator가 위임받는 것.
+        context.coordinator.view = arView //coordinator는 view를 알고있음. //TODO: ?
+        arView.session.delegate = context.coordinator //delegate를 초기 상태 context의 coordinator에 위임하기. //TODO: ?
+        //arView.session의 이벤트는 코디네이터에게 위임되고 코디네이터는 책임을 집니다. (이벤트를 처리하기위해)
+        
+        let anchor = AnchorEntity(plane: .horizontal) //scene의 중심에 위치 잡힘.
+        
+        let box = ModelEntity(mesh: MeshResource.generateBox(size: 0.3), materials: [SimpleMaterial(color: .yellow, isMetallic: true)])
+        
+        box.generateCollisionShapes(recursive: true) //gesture동작 시 필수. 충돌감지를 해야 Tap도 감지하는 듯.
+        
+        anchor.addChild(box)
+        
+        arView.scene.anchors.append(anchor)
+        
+        return arView
+    }
+    
+    func updateUIView(_ uiView: ARView, context: Context) {
+        
+    }
+    
+    func makeCoordinator() -> Coordinator2 { //코디네이터 지정.
+        Coordinator2()
+        // Coordinator의 경우 UIKit -> SwiftUI로의 데이터 전달이라고 생각하면 쉽다.Coordinator라고 해서 새로운 개념 같지만, 사실상 "delegate"의 역할을 한다고 봐도 무방하다.
     }
 }
 

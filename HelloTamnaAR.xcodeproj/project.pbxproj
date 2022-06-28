@@ -11,6 +11,8 @@
 		96329B4A286AB9E000CAA4BE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96329B49286AB9E000CAA4BE /* ContentView.swift */; };
 		96329B4E286AB9E100CAA4BE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 96329B4D286AB9E100CAA4BE /* Assets.xcassets */; };
 		96329B51286AB9E100CAA4BE /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 96329B50286AB9E100CAA4BE /* Preview Assets.xcassets */; };
+		9648B620286B49280010C1B2 /* UIColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9648B61F286B49280010C1B2 /* UIColor+Extensions.swift */; };
+		96C0C5B6286B3B6900BBDDE2 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C0C5B5286B3B6900BBDDE2 /* Coordinator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +21,8 @@
 		96329B49286AB9E000CAA4BE /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		96329B4D286AB9E100CAA4BE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		96329B50286AB9E100CAA4BE /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		9648B61F286B49280010C1B2 /* UIColor+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extensions.swift"; sourceTree = "<group>"; };
+		96C0C5B5286B3B6900BBDDE2 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +57,8 @@
 			children = (
 				96329B47286AB9E000CAA4BE /* AppDelegate.swift */,
 				96329B49286AB9E000CAA4BE /* ContentView.swift */,
+				96C0C5B5286B3B6900BBDDE2 /* Coordinator.swift */,
+				9648B61F286B49280010C1B2 /* UIColor+Extensions.swift */,
 				96329B4D286AB9E100CAA4BE /* Assets.xcassets */,
 				96329B4F286AB9E100CAA4BE /* Preview Content */,
 			);
@@ -139,6 +145,8 @@
 			files = (
 				96329B4A286AB9E000CAA4BE /* ContentView.swift in Sources */,
 				96329B48286AB9E000CAA4BE /* AppDelegate.swift in Sources */,
+				96C0C5B6286B3B6900BBDDE2 /* Coordinator.swift in Sources */,
+				9648B620286B49280010C1B2 /* UIColor+Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
