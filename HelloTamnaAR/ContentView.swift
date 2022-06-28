@@ -10,7 +10,7 @@ import RealityKit
 
 struct ContentView : View {
     var body: some View {
-        return ARViewContainer()
+        return ARTextViewContainer()
             .edgesIgnoringSafeArea(.all)
     }
 }
@@ -43,7 +43,7 @@ struct ARViewContainer: UIViewRepresentable {
         sphere.position = simd_make_float3(0,0.3,0)
         //x:수평좌우, y:위아래, z:앞뒤(가깝고 먼)
         
-        //plane == 평면. width: 가로, depth: 세로.
+        //plane == 평면(직사각형). width: 가로, depth: 세로.
         let plane = ModelEntity(mesh: MeshResource.generatePlane(width: 0.5, depth: 0.3), materials: [SimpleMaterial(color: .red, isMetallic: true)])
         plane.position = simd_make_float3(0, 0.45, 0)
         
@@ -64,6 +64,34 @@ struct ARViewContainer: UIViewRepresentable {
         
     }
     
+}
+
+struct ARTextViewContainer: UIViewRepresentable {
+    
+    func makeUIView(context: Context) -> ARView {
+        let arView = ARView(frame: .zero)
+        
+        let anchor = AnchorEntity(plane: .horizontal)
+        
+        let text = ModelEntity(mesh: MeshResource.generateText("Hello, I'm Tamna", //default로 0,0,0에서부터 글자가 시작되서 첫글자부터 보인다.
+                                                               extrusionDepth: 0.03, //text의 깊이?크기?
+                                                               font: .systemFont(ofSize: 0.2, weight: .black), //size도 meter단위임.
+                                                               containerFrame: .zero,
+                                                               //text가 표시될 실제 frame. -> zero를 하면 컨테이너가 다음에 따라 텍스트를 담을 수 있을만큼 충분히 크다는 의미. 그냥 무제한 한 줄.
+                                                               alignment: .center, //여러 줄일 때 정렬기준.
+                                                               lineBreakMode: .byCharWrapping), //frame보다 클때 어떻게 하냐는 건가.
+                               materials: [SimpleMaterial(color: .orange, isMetallic: true)])
+        
+        anchor.addChild(text)
+        
+        arView.scene.anchors.append(anchor)
+        
+        return arView
+    }
+    
+    func updateUIView(_ uiView: ARView, context: Context) {
+        
+    }
 }
 
 #if DEBUG
