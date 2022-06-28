@@ -60,13 +60,13 @@ class Coordinator2: NSObject, ARSessionDelegate {
             //기존 AR 앵커가 없어도..? 추가가 가능하네? 가능하다.
             //ARAnchor class 자체가 makeUIView에서 생성? 사용이 불가능하네요. ARsessionDelegate를 여기 coordinator에서 받아서 그런듯.
             //AnchorEntity-RealityKit꺼. scene에 저장됨., ARAnchor-ARKit산유물. session에 저장됨.
-            let anchor = ARAnchor(name: "Plane Anchor", transform: result.worldTransform) //result의 실제세계에서의 위치값?
+            let anchor = ARAnchor(name: "Plane Anchor", transform: result.worldTransform) //세계변환한 값을 기준으로 새로운 anchor를 생성. 이는 모든 변형 정보, 방향, 축척, 크기, 회전 등등을 포함한다는 것을 의미한다.
             view.session.add(anchor: anchor) //plane을 감지하여 생성된 anchor가 session에 추가됨. 이렇게 add안하면 생성안됨.
             
             let modelEntity = ModelEntity(mesh: MeshResource.generateBox(size: 0.3))
             modelEntity.model?.materials = [SimpleMaterial(color: .blue, isMetallic: true)]
             
-            let anchorEntity = AnchorEntity(anchor: anchor) //이미존재하는 anchor에 anchor를 추가할 때인가?
+            let anchorEntity = AnchorEntity(anchor: anchor)
             anchorEntity.addChild(modelEntity)
             
             view.scene.addAnchor(anchorEntity)
@@ -75,6 +75,7 @@ class Coordinator2: NSObject, ARSessionDelegate {
             //3. scene에서 쓰일 AnchorEntity의 anchor로 ARAnchor를 넣음.
             //4. model넣기.
             //5. scene에 만들어진 AnchorEntity를 추가.
+            //요약 : ARAnchor -> Add to Session -> AnchorEntity로 만듦 -> ModelEntity넣기 -> Add to Scene
             
             print(view.scene.anchors.count) //tap -> count += 1
         }
@@ -84,3 +85,38 @@ class Coordinator2: NSObject, ARSessionDelegate {
 /*
  사용자가 현실 세계의 물리적 구조와 관련하여 가상 객체를 배치하도록 하려면 레이캐스트를 수행해야 합니다. 손가락 탭 위치에서 인지된 AR 세계로 광선을 "촬영"합니다. 그런 다음 레이캐스트는 이 광선이 비행기나 포인트 클라우드와 같은 추적 가능과 교차하는지 알려줍니다.
  */
+
+//복잡했지 ARAnchor? 짧게해보자. ARAnchor 쓸 필요없나봐.
+
+class Coordinator3: NSObject {
+    
+    //ARAnchor는 RealityKit에서 사용할 수 있지만, 간단히 무시하고 대신 AnchorEntity를 사용하십시오.
+    
+    weak var view: ARView?
+    
+    @objc func handleTap(_ recognizer: UITapGestureRecognizer) {
+        
+        guard let view = view else { return }
+        
+        let tapLocation = recognizer.location(in: view)
+        let results = view.raycast(from: tapLocation, allowing: .estimatedPlane, alignment: .horizontal)
+        
+        if let result = results.first {
+            
+            //ARAnchor - ARKit Framework
+            //AnchorEntity - RealityKit Framework ... so we'd better use AnchorEntity... 
+            
+            let anchorEntity = AnchorEntity(raycastResult: result) //이렇게 접근하면 더이상 ARSessionDelegate도 필요없음. 지우자.
+            
+            let modelEntity = ModelEntity(mesh: MeshResource.generateBox(size: 0.1))
+            modelEntity.model?.materials = [SimpleMaterial(color: UIColor.random(), isMetallic: true)]
+            anchorEntity.addChild(modelEntity)
+            
+            view.scene.anchors.append(anchorEntity)
+        }
+    }
+}
+
+//ARKit과 RealityKit의 혼합을 설명하기 위해 Coordinator2처럼 해본 것.
+//RealityKit은 Entity, AnchorEntity, ModelEntity, this Entity, that Entity... Entity로 시작하고 Entity로 끝난다.
+//RealityKit은 결국 Anchor로 AnchorEntity만 잘 있으면 된다.

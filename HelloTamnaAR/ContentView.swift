@@ -104,7 +104,7 @@ struct ARGestureViewContainer: UIViewRepresentable {
         //모든 다른 제스쳐에 대해 모든 다른 delegate 기능은 coordinator가 처리합니다.
         //본디 UIKit코드에선 delegate위임을 self로 그 View가 받지만, UIKit in SwiftUI코드에선 실제 SwiftUI에 반영하기위해 coordinator를 필수로 구현해야한다. 그렇기에 delegate도 coordinator가 위임받는 것.
         context.coordinator.view = arView //coordinator는 view를 알고있음. //TODO: ?
-        arView.session.delegate = context.coordinator //delegate를 초기 상태 context의 coordinator에 위임하기. //TODO: ?
+//        arView.session.delegate = context.coordinator //delegate를 초기 상태 context의 coordinator에 위임하기. //TODO: ?
         //arView.session의 이벤트는 코디네이터에게 위임되고 코디네이터는 책임을 집니다. (이벤트를 처리하기위해)
         
         let anchor = AnchorEntity(plane: .horizontal) //scene의 중심에 위치 잡힘.
@@ -124,8 +124,8 @@ struct ARGestureViewContainer: UIViewRepresentable {
         
     }
     
-    func makeCoordinator() -> Coordinator2 { //코디네이터 지정.
-        Coordinator2()
+    func makeCoordinator() -> Coordinator3 { //코디네이터 지정.
+        Coordinator3()
         // Coordinator의 경우 UIKit -> SwiftUI로의 데이터 전달이라고 생각하면 쉽다.Coordinator라고 해서 새로운 개념 같지만, 사실상 "delegate"의 역할을 한다고 봐도 무방하다.
     }
 }
